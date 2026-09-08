@@ -1,0 +1,96 @@
+
+//Testcase 3 
+
+1.Navigate to demowebshop
+2.Identify the webelement(14.1-inch laptop)-->identify add to cart button capture the size and them click on the buuton.
+3.Click on shopping cart link.
+4.verify remove check box is selected or not and capture the complete information using getRect().
+5.Verify Alert message is displayed or not before and after clicking on Apply coupon button
+6.Take screenshot of image(Laptop).
+
+
+
+
+
+package Day2_Assessment;
+
+import java.io.File;
+import java.time.Duration;
+import org.openqa.selenium.By;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.Rectangle;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+public class TestCase_3 {
+
+	public static void main(String[] args) throws InterruptedException {
+
+		WebDriver driver=new ChromeDriver();
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+		driver.get("https://demowebshop.tricentis.com/");
+
+		WebElement laptop=driver.findElement(By.xpath("//a[text()='14.1-inch Laptop']"));
+
+		WebElement addToCart=driver.findElement(By.xpath("//a[text()='14.1-inch Laptop']/ancestor::div[@class='product-item']//input[@value='Add to cart']"));
+
+		System.out.println("Width: "+addToCart.getSize().getWidth());
+		System.out.println("Height: "+addToCart.getSize().getHeight());
+
+		addToCart.click();
+
+		WebDriverWait wait=new WebDriverWait(driver,Duration.ofSeconds(10));
+		wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("bar-notification")));
+
+		driver.findElement(By.className("cart-label")).click();
+
+		WebElement removeCheckbox=driver.findElement(By.name("removefromcart"));
+
+		System.out.println("Remove Checkbox Selected: "+removeCheckbox.isSelected());
+
+		Rectangle rect=removeCheckbox.getRect();
+
+		System.out.println("X: "+rect.getX());
+		System.out.println("Y: "+rect.getY());
+		System.out.println("Width: "+rect.getWidth());
+		System.out.println("Height: "+rect.getHeight());
+
+		try {
+			driver.switchTo().alert();
+			System.out.println("Alert before Apply Coupon: Yes");
+			driver.switchTo().alert().accept();
+		}
+		catch(Exception e) {
+			System.out.println("Alert before Apply Coupon: No");
+		}
+
+		WebElement applyCoupon=driver.findElement(By.name("applydiscountcouponcode"));
+		applyCoupon.click();
+
+		Thread.sleep(1000);
+
+		try {
+			String message=driver.switchTo().alert().getText();
+			System.out.println("Alert after Apply Coupon: Yes");
+			System.out.println("Alert Message: "+message);
+			driver.switchTo().alert().accept();
+		}
+		catch(Exception e) {
+			System.out.println("Alert after Apply Coupon: No");
+		}
+
+		WebElement laptopImage=driver.findElement(By.xpath("//a[text()='14.1-inch Laptop']/ancestor::tr//img"));
+
+		File source=laptopImage.getScreenshotAs(OutputType.FILE);
+		File destination=new File("./ss/Laptop.png");
+		source.renameTo(destination);
+
+		System.out.println("Laptop screenshot captured successfully.");
+
+		driver.quit();
+	}
+}
