@@ -59,3 +59,69 @@ public class Sauce {
         driver.quit();
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TestCase-2
+
+
+package Assessment;
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class Myntra {
+
+    public static void main(String[] args) throws InterruptedException {
+
+        WebDriver driver = new ChromeDriver();
+
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+
+        driver.get("https://www.myntra.com/");
+
+        Thread.sleep(2000);
+
+        driver.findElement(By.xpath("//input[@placeholder='Search for products, brands and more']")).sendKeys("Nike Shoes");
+
+        Thread.sleep(2000);
+
+        driver.findElement(By.xpath("//input[@placeholder='Search for products, brands and more']")).sendKeys(Keys.ENTER);
+
+        Thread.sleep(3000);
+
+        driver.findElement(By.xpath("(//li[contains(@class,'product-base')])[1]")).click();
+
+        Thread.sleep(5000);
+
+        WebElement wishlist = driver.findElement(By.xpath("//span[@class='desktop-userTitle' and text()='Wishlist']"));
+
+        wishlist.click();
+
+        Thread.sleep(3000);
+
+        System.out.println("Product added to wishlist successfully");
+
+        driver.quit();
+    }
+}
