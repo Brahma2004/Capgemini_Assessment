@@ -41,6 +41,7 @@ public class FaceBook {
 }
 
 
+
 TestCase-2
 
 package Day2_Assessment;
@@ -108,23 +109,6 @@ public class FaceBook2 {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //Testcase 3 
 
 1.Navigate to demowebshop
@@ -133,8 +117,6 @@ public class FaceBook2 {
 4.verify remove check box is selected or not and capture the complete information using getRect().
 5.Verify Alert message is displayed or not before and after clicking on Apply coupon button
 6.Take screenshot of image(Laptop).
-
-
 
 
 
