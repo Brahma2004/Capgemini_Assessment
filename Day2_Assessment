@@ -1,3 +1,129 @@
+TestCase-1
+
+package Day2_Assessment;
+
+import java.time.Duration;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Point;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class FaceBook {
+
+    public static void main(String[] args) throws InterruptedException {
+
+        // 1. Navigate to the Facebook application
+        WebDriver driver = new ChromeDriver();
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.get("https://www.facebook.com/");
+
+        // 2. Click on Create New Account button
+        driver.findElement(By.linkText("Create new account")).click();
+        Thread.sleep(3000);
+
+        // 3. Verify First Name and Surname text fields are aligned in the same line
+        WebElement firstName = driver.findElement(By.xpath("(//input[@type='text'])[1]"));
+        WebElement surname = driver.findElement(By.xpath("(//input[@type='text'])[2]"));
+
+        Point firstNameLocation = firstName.getLocation();
+        Point surnameLocation = surname.getLocation();
+
+        if (firstNameLocation.getY() == surnameLocation.getY()) {
+            System.out.println("PASS: First Name and Surname text fields are aligned in the same line.");
+        } else {
+            System.out.println("FAIL: First Name and Surname text fields are not aligned in the same line.");
+        }
+
+        driver.quit();
+    }
+}
+
+
+TestCase-2
+
+package Day2_Assessment;
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class FaceBook2 {
+
+	public static void main(String[] args) throws InterruptedException {
+
+		WebDriver driver = new ChromeDriver();
+
+		driver.manage().window().maximize();
+
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+
+		driver.get("https://www.facebook.com/");
+
+		Thread.sleep(2000);
+
+		WebElement createAccount = driver.findElement(By.xpath("(//span[@class='x1lliihq x193iq5w x6ikm8r x10wlt62 xlyipyv xuxw1ft'])[3]"));
+
+		System.out.println("Location: " + createAccount.getLocation());
+
+		WebElement emailField = driver.findElement(By.id("_R_1h6kqsqppb6amH1_"));
+
+		System.out.println("Before DOM Attribute: " + emailField.getDomAttribute("value"));
+
+		System.out.println("Before DOM Property: " + emailField.getDomProperty("value"));
+
+		Thread.sleep(2000);
+
+		emailField.sendKeys("Bk3247@gmail.com");
+
+		System.out.println("After DOM Attribute: " + emailField.getDomAttribute("value"));
+
+		System.out.println("After DOM Property: " + emailField.getDomProperty("value"));
+
+		Thread.sleep(2000);
+
+		createAccount.click();
+
+		WebElement signUp = driver.findElement(By.linkText("Sign up"));
+
+		System.out.println("Sign Up Button Size: " + signUp.getSize());
+
+		System.out.println("Color: " + signUp.getCssValue("color"));
+
+		System.out.println("Font Family: " + signUp.getCssValue("font-family"));
+
+		System.out.println("Font Weight: " + signUp.getCssValue("font-weight"));
+
+		driver.quit();
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //Testcase 3 
 
