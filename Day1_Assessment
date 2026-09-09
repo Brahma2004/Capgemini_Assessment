@@ -67,7 +67,7 @@ public class Sauce {
 TestCase-2
 
 
-package Assessment;
+package Day1_Assessment;
 
 import java.time.Duration;
 
