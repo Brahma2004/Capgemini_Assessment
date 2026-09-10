@@ -1,0 +1,186 @@
+TestCase-1
+
+package Day3_Assessment;
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.StaleElementReferenceException;
+
+public class TestCase_1 {
+
+	public static void main(String[] args) throws InterruptedException {
+
+		ChromeOptions option = new ChromeOptions();
+		option.addArguments("--disable-notifications");
+
+		WebDriver driver = new ChromeDriver(option);
+
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+
+		// 1. Navigate to EaseMyTrip
+
+		driver.get("https://www.easemytrip.com/");
+
+		Thread.sleep(3000);
+
+		// 2. Enter From location
+
+		driver.findElement(By.id("FromSector_show")).click();
+
+		driver.findElement(By.id("a_FromSector_show")).sendKeys("Bangalore");
+
+		driver.findElement(By.xpath("//p[text()='Kempegowda International Airport']")).click();
+
+		System.out.println("From location selected");
+
+		// 3. Enter To location
+
+		Thread.sleep(2000);
+
+		driver.findElement(By.id("a_Editbox13_show")).click();
+
+		driver.findElement(By.id("a_Editbox13_show")).sendKeys("Delhi");
+
+		System.out.println("To location entered");
+
+		Thread.sleep(2000);
+
+		// Select Delhi suggestion
+
+		for (int i = 0; i < 3; i++) {
+
+			try {
+
+				driver.findElement(By.xpath("//p[text()='Indira Gandhi International Airport']")).click();
+
+				System.out.println("To location selected");
+
+				break;
+
+			} catch (StaleElementReferenceException e) {
+
+				System.out.println("Delhi suggestion refreshed, trying again...");
+
+				Thread.sleep(1000);
+			}
+		}
+
+		// 4. Select Departure Date
+
+		driver.findElement(By.id("snd_5_11/09/2026")).click();
+
+		System.out.println("Departure date selected");
+
+		// 5. Click Traveller & Class
+
+		driver.findElement(By.id("iDownArr")).click();
+
+		System.out.println("Traveller & Class clicked");
+
+		Thread.sleep(2000);
+
+		// 6. Select 2 Adults
+
+		driver.findElement(By.xpath("//*[@id='add']")).click();
+
+		System.out.println("2 Adults selected");
+
+		// 7. Keep Economy
+
+		driver.findElement(By.id("pcalss")).click();
+
+		System.out.println("Economy selected");
+
+		driver.findElement(By.xpath("//input[@value=\"Search\" and @tabindex=\"1\"]")).click();
+
+		System.out.println("Search clicked");
+
+		Thread.sleep(5000);
+
+
+		String currentURL = driver.getCurrentUrl();
+
+		System.out.println("Current URL: " + currentURL);
+
+		if (currentURL.toLowerCase().contains("flightlist")) {
+
+			System.out.println("Flight-results page is displayed.");
+
+		} else {
+
+			System.out.println("Flight-results page is not displayed.");
+		}
+
+		driver.quit();
+	}
+}
+
+
+
+
+
+TestCase-2
+
+
+
+package Day3_Assessment;
+
+import java.time.Duration;
+import java.util.List;
+import java.util.Random;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class Testcase2 {
+
+	public static void main(String[] args) throws InterruptedException {
+
+		WebDriver driver = new ChromeDriver();
+
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(20));
+
+		// 1. Navigate to demo app QSpiders date picker
+		driver.get("https://demoapps.qspiders.com/ui/datePick?sublist=0");
+
+		// 2. Click on calendar
+		WebElement calendar = driver.findElement(By.xpath("//input"));
+		calendar.click();
+
+		// 3. Navigate to the next month in the current year
+		WebElement nextMonth = driver.findElement(By.xpath("//button[contains(@class,'react-datepicker__navigation--next')]"));
+		nextMonth.click();
+
+		// 4. Select any valid date randomly from that month
+		List<WebElement> dates = driver.findElements(By.xpath("//div[contains(@class,'react-datepicker__day') and @role='option' and not(contains(@class,'outside-month'))]"));
+
+		Random random = new Random();
+		WebElement date = dates.get(random.nextInt(dates.size()));
+		String selectedDate = date.getText();
+
+		System.out.println("Randomly Selected Date: " + selectedDate);
+
+		date.click();
+
+		// 5. Verify that the selected date is displayed correctly in the date field
+		String actualDate = calendar.getAttribute("value");
+
+		System.out.println("Displayed Date: " + actualDate);
+
+		if (actualDate != null && !actualDate.isEmpty()) {
+			System.out.println("Test Case Passed");
+		} else {
+			System.out.println("Test Case Failed");
+		}
+
+		driver.quit();
+	}
+}
