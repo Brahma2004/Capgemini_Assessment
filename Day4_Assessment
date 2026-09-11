@@ -1,1 +1,170 @@
 
+Test Case-1:
+
+package Assessment;
+
+import java.time.Duration;
+
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class DemoWebShopTextFields {
+
+    public static void main(String[] args) throws InterruptedException {
+
+        WebDriver driver = new ChromeDriver();
+
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+
+        driver.get("https://demowebshop.tricentis.com/");
+        
+        List<WebElement> textfields=driver.findElements(By.tagName("input"));
+        System.out.println("Number of textfields:" + textfields.size());
+        
+        WebElement ele=driver.findElement(By.id("small-searchterms"));
+        ele.sendKeys("mobiles");    
+        System.out.println(ele);
+}
+}
+
+
+
+
+
+
+Test Case-2:
+
+package Assessment;
+
+import java.time.Duration;
+import java.util.Set;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class Zomato {
+
+    public static void main(String[] args) throws InterruptedException {
+
+        WebDriver driver = new ChromeDriver();
+
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+
+        // 1. Navigate to Zomato
+        driver.get("https://www.zomato.com/bangalore/delivery");
+
+        // Store parent window ID
+        String parentWindow = driver.getWindowHandle();
+
+        System.out.println("Parent Window ID: " + parentWindow);
+
+        // 2. Click Login
+        driver.findElement(By.xpath("//button[contains(text(),'Log in')]")).click();
+
+        Thread.sleep(3000);
+
+        // 3. Check number of windows
+        Set<String> allWindows = driver.getWindowHandles();
+
+        System.out.println("Total Windows: " + allWindows.size());
+
+        // 4. Verify whether new window/tab opened
+        if (allWindows.size() > 1) {
+
+            System.out.println("Login opened in a NEW WINDOW / TAB");
+
+            for (String window : allWindows) {
+
+                if (!window.equals(parentWindow)) {
+
+                    driver.switchTo().window(window);
+
+                    System.out.println("Switched to Login Window");
+                    System.out.println("Title: " + driver.getTitle());
+                    System.out.println("URL: " + driver.getCurrentUrl());
+                }
+            }
+
+        } else {
+
+            System.out.println("No new window/tab opened.");
+
+            // 5. Check for iframes
+            int frameCount = driver.findElements(By.tagName("iframe")).size();
+
+            System.out.println("Number of iframes: " + frameCount);
+
+            if (frameCount > 0) {
+
+                System.out.println("Login is inside an IFRAME.");
+
+                // Try switching to iframe
+                driver.switchTo().frame(0);
+
+                System.out.println("Successfully switched to iframe.");
+
+            } else {
+
+                System.out.println("Login is NOT a new window and NOT an iframe.");
+                System.out.println("Login is likely a normal DOM modal/dialog.");
+            }
+        }
+
+        Thread.sleep(3000);
+
+    }
+
+
+
+
+
+Test Case-3:
+
+package Assessment;
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class Bigbasket {
+	public static void main(String[] args) throws InterruptedException {
+		WebDriver driver = new ChromeDriver();
+		driver.manage().window().maximize();
+		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+		driver.get("https://www.bigbasket.com/");
+		Thread.sleep(3000);
+		driver.findElement(By.xpath("(//input[@type='text'])[2]")).sendKeys("yogurt");;
+		Thread.sleep(4000);
+		WebElement add = driver.findElement(By.xpath("//button[text()='Add']"));
+		add.click();
+		Thread.sleep(5000);
+		WebElement add1 = driver.findElement(By.xpath("(//button[text()='Add'])[5]"));
+		add1.click();
+		Thread.sleep(2000);
+		String text = driver.findElement(By.xpath("//span[@class='sc-fUnMCh cDZjuK']")).getText();
+		if(!text.equals(""))
+		{
+			System.out.println("added to cart");
+			System.out.println(text+" products are added to cart");
+		}
+		else
+		{
+			System.out.println("not added to cart");
+		}
+		Thread.sleep(2000);
+		//driver.quit();
+	}
+}
+}
+}
