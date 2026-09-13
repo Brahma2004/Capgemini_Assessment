@@ -1,1 +1,127 @@
-...
+
+TestCase-1
+
+package Day6_Assessment;
+
+import java.io.FileInputStream;
+import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+
+public class TestCase_1 {
+
+    public static void main(String[] args) throws Exception {
+
+        // 1. Read common data from Property file
+        FileInputStream propertyFile =new FileInputStream(".\\src\\test\\resources\\DDT\\CommonData2.properties");
+
+        Properties prop = new Properties();
+        prop.load(propertyFile);
+        String url = prop.getProperty("url");
+        String adminUsername = prop.getProperty("adminUsername");
+        String adminPassword = prop.getProperty("adminPassword");
+        propertyFile.close();
+        // 2. Read test data from Excel
+        FileInputStream excelFile =new FileInputStream(".\\src\\test\\resources\\DDT\\TestData.xlsx");
+        Workbook workbook = WorkbookFactory.create(excelFile);
+        Sheet sheet = workbook.getSheet("LoginTest");
+        Row row = sheet.getRow(1);
+        String firstName = row.getCell(0).toString();
+        String middleName = row.getCell(1).toString();
+        String lastName = row.getCell(2).toString();
+        String username = row.getCell(3).toString();
+        String password = row.getCell(4).toString();
+        String role = row.getCell(5).toString();
+        String status = row.getCell(6).toString();
+
+        // =====================================================
+        // 3. Avoid Change Password popup
+
+        ChromeOptions settings = new ChromeOptions();
+
+        Map<String, Object> prefs = new HashMap<>();
+        prefs.put("profile.password_manager_leak_detection",false);
+        settings.setExperimentalOption("prefs", prefs);
+        // 4. Launch Browser
+        WebDriver driver = new ChromeDriver(settings);
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        // 5. Open OrangeHRM
+        driver.get(url);
+        // 6. Login
+        driver.findElement(By.name("username")).sendKeys(adminUsername);
+
+        driver.findElement(By.name("password")).sendKeys(adminPassword);
+
+        driver.findElement(By.xpath("//button[@type='submit']")).click();
+        // 7. Click PIM
+        driver.findElement(By.xpath("//span[text()='PIM']")).click();
+        // 8. Click + Add
+        driver.findElement(By.xpath("//button[contains(.,'Add')]")).click();
+        // 9. Enter Employee Details
+        driver.findElement(By.name("firstName")).sendKeys(firstName);
+        driver.findElement(By.name("middleName")).sendKeys(middleName);
+        driver.findElement(By.name("lastName")).sendKeys(lastName);
+        // Employee ID
+        WebElement employeeId = driver.findElement(By.xpath("//label[text()='Employee Id']/following::input[1]"));
+        employeeId.clear();
+        employeeId.sendKeys("1001");
+        // 10. Create Login Details
+        WebElement toggle = driver.findElement(By.xpath("//p[text()='Create Login Details']/following::span[1]"));
+        toggle.click();
+        // 11. Enter Username
+        driver.findElement(By.xpath("//label[text()='Username']/following::input[1]")).sendKeys(username);
+        // 12. Enter Password
+        driver.findElement(By.xpath("//label[text()='Password']/following::input[1]")).sendKeys(password);
+        // 13. Confirm Password
+        driver.findElement(By.xpath("//label[text()='Confirm Password']/following::input[1]")).sendKeys(password);
+        // 14. Click Save
+        driver.findElement(By.xpath("//button[@type='submit']")).click();
+        Thread.sleep(2000);
+        // 15. Click Admin
+        driver.findElement(By.xpath("//span[text()='Admin']")).click();
+        // 16. Enter Username
+        driver.findElement(By.xpath("//label[text()='Username']/following::input[1]")).sendKeys(username);
+        // 17. Select User Role
+        WebElement userRole = driver.findElement(By.xpath("//label[text()='User Role']/following::div[contains(@class,'oxd-select-text')][1]"));
+        userRole.click();
+        driver.findElement(By.xpath("//div[@role='option']//span[text()='" + role + "']")).click();
+        // 18. Enter Employee Name
+        WebElement employeeName = driver.findElement(By.xpath("//label[text()='Employee Name']/following::input[1]"));
+        employeeName.sendKeys(firstName);
+        Thread.sleep(2000);
+        // Select employee suggestion
+        driver.findElement(By.xpath("//div[@role='option']")).click();
+        // 19. Select Status
+        WebElement statusDropdown = driver.findElement(By.xpath("//label[text()='Status']/following::div[contains(@class,'oxd-select-text')][1]"));
+        statusDropdown.click();
+        driver.findElement(By.xpath("//div[@role='option']//span[text()='" + status + "']")).click();
+        // 20. Click Search
+        driver.findElement(By.xpath("//button[contains(.,'Search')]")).click();
+        Thread.sleep(2000);
+        // 21. Verify Employee
+        String pageText = driver.findElement(By.tagName("body")).getText();
+        if (pageText.contains(username)) {
+            System.out.println("PASS: Employee is added successfully.");
+        } else {
+            System.out.println("FAIL: Employee is not found.");
+        }
+        // 22. Logout
+        driver.findElement(By.xpath("//span[contains(@class,'oxd-userdropdown-tab')]")).click();
+        driver.findElement(By.xpath("//a[text()='Logout']")).click();
+        // 23. Close Browser
+        driver.quit();
+    }
+}
