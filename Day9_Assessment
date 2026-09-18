@@ -1,0 +1,84 @@
+
+// KEYWORD-SAUCE-EXECUTORS
+
+package KeyWordSauceDriven;
+
+public class KeyWordsauceExecutors {
+       KeyWordsauceImplementations s = new KeyWordsauceImplementations();
+       
+       public void exe(String key) {
+    	   if(key.equals("LAUNCH_BROWSER")) {
+    		   s.launchbrowser();
+    	   }
+    	   else if(key.equals("OPEN_URL")) {
+    		   s.openurl();
+    	   }
+    	   else if(key.equals("USERNAME")) {
+    		   s.Username();
+    	   }
+    	   else if(key.equals("PASS")) {
+    		   s.Password();
+    	   }
+    	   else if(key.equals("LBUTTON")) {
+    		   s.loginbutton();
+    	   }
+    		   
+       }
+       
+}
+
+
+// KEYWORD-SAUCE-IMPLEMENTATION
+
+package KeyWordSauceDriven;
+
+import java.time.Duration;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+public class KeyWordsauceImplementations {
+       WebDriver driver;
+      
+       public void launchbrowser() {
+    	   driver = new ChromeDriver();
+    	   driver.manage().window().maximize();
+    	   driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+       }
+       
+       public void openurl() {
+    	   driver.get("https://www.saucedemo.com/");
+       }
+       
+       public void Username() {
+    	   driver.findElement(By.id("user-name")).sendKeys("standard_user");
+       }
+       
+       public void Password() {
+    	   driver.findElement(By.id("password")).sendKeys("secret_sauce");
+       }
+       
+       public void loginbutton() {
+    	   driver.findElement(By.id("login-button")).click();
+       }
+}
+
+
+// SAUCE
+
+package KeyWordSauceFrameworkImplementation;
+
+import KeyWordSauceDriven.KeyWordsauceExecutors;
+
+public class Sauce {
+     public static void main(String[] args) {
+		KeyWordsauceExecutors s = new KeyWordsauceExecutors();
+		s.exe("LAUNCH_BROWSER");
+		s.exe("OPEN_URL");
+		s.exe("USERNAME");
+		s.exe("PASS");
+		s.exe("LBUTTON");
+		
+	}
+}
